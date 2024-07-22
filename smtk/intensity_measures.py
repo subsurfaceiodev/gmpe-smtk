@@ -31,12 +31,10 @@ import smtk.response_spectrum as rsp
 from smtk.smoothing import konno_ohmachi
 from smtk.sm_utils import get_time_vector, _save_image, nextpow2
 
-
 RESP_METHOD = {
     'Newmark-Beta': rsp.NewmarkBeta,
     'Nigam-Jennings': rsp.NigamJennings
 }
-
 
 SMOOTHING = {"KonnoOhmachi": konno_ohmachi.KonnoOhmachi}
 
@@ -101,6 +99,20 @@ def get_fourier_spectrum(time_series, time_step):
     return freq, time_step * np.absolute(fspec[:int(n_val / 2.0)])
 
 
+def get_mean_period(acceleration, time_step):
+    """
+    Returns the mean period of the record according to Rathje et al. (1998)
+    :param numpy.ndarray acceleration:
+        Vector of acceleration values
+    :param float time_step:
+        Time-step of record (s)
+    """
+    frequency, amplitude = get_fourier_spectrum(acceleration, time_step)
+    span = (frequency >= 0.25) & (frequency <= 20)
+    mean_period = np.average(1 / frequency[span], weights=amplitude[span] ** 2)
+    return mean_period
+
+
 def plot_fourier_spectrum(time_series, time_step, figure_size=(7, 5),
                           filename=None, filetype="png", dpi=300):
     """
@@ -162,7 +174,7 @@ def get_hvsr(x_component, x_time_step, y_component, y_time_step, vertical,
     return hvsr, xfreq, hvsr[max_loc], 1.0 / xfreq[max_loc]
 
 
-def get_response_spectrum(acceleration, time_step, periods, damping=0.05, 
+def get_response_spectrum(acceleration, time_step, periods, damping=0.05,
                           units="cm/s/s", method="Nigam-Jennings"):
     """
     Returns the elastic response spectrum of the acceleration time series.
@@ -185,7 +197,7 @@ def get_response_spectrum(acceleration, time_step, periods, damping=0.05,
     """
     response_spec = RESP_METHOD[method](acceleration,
                                         time_step,
-                                        periods, 
+                                        periods,
                                         damping,
                                         units)
     spectrum, time_series, accel, vel, disp = response_spec()
@@ -213,14 +225,14 @@ def get_response_spectrum_pair(acceleration_x, time_step_x, acceleration_y,
     sax = get_response_spectrum(acceleration_x,
                                 time_step_x,
                                 periods,
-                                damping, 
-                                units, 
+                                damping,
+                                units,
                                 method)[0]
     say = get_response_spectrum(acceleration_y,
                                 time_step_y,
-                                periods, 
-                                damping, 
-                                units, 
+                                periods,
+                                damping,
+                                units,
                                 method)[0]
     return sax, say
 
@@ -366,7 +378,7 @@ def gmrotdpp(acceleration_x, time_step_x, acceleration_y, time_step_y, periods,
     }
 
 
-KEY_LIST = ["PGA", "PGV", "PGD", "Acceleration", "Velocity", 
+KEY_LIST = ["PGA", "PGV", "PGD", "Acceleration", "Velocity",
             "Displacement", "Pseudo-Acceleration", "Pseudo-Velocity"]
 
 
@@ -393,7 +405,7 @@ def gmrotdpp_slow(acceleration_x, time_step_x, acceleration_y, time_step_y,
         "Acceleration": np.zeros([len(angles), len(periods)], dtype=float),
         "Velocity": np.zeros([len(angles), len(periods)], dtype=float),
         "Displacement": np.zeros([len(angles), len(periods)], dtype=float),
-        "Pseudo-Acceleration": np.zeros([len(angles), len(periods)], 
+        "Pseudo-Acceleration": np.zeros([len(angles), len(periods)],
                                         dtype=float),
         "Pseudo-Velocity": np.zeros([len(angles), len(periods)], dtype=float)}
     # Get the response spectra for each angle
@@ -410,10 +422,10 @@ def gmrotdpp_slow(acceleration_x, time_step_x, acceleration_y, time_step_y,
         sa_gm = geometric_mean_spectrum(sax, say)
         for key in KEY_LIST:
             if key in ["PGA", "PGV", "PGD"]:
-                 gmrotdpp[key][iloc] = sa_gm[key]
+                gmrotdpp[key][iloc] = sa_gm[key]
             else:
-                 gmrotdpp[key][iloc, :] = sa_gm[key]
-              
+                gmrotdpp[key][iloc, :] = sa_gm[key]
+
     # Get the desired fractile
     for key in KEY_LIST:
         gmrotdpp[key] = np.percentile(gmrotdpp[key], percentile, axis=0)
@@ -448,8 +460,7 @@ def gmrotipp(acceleration_x, time_step_x, acceleration_y, time_step_y, periods,
                                                      acceleration_y)
     gmrot = gmrotdpp(acceleration_x, time_step_x, acceleration_y,
                      time_step_y, periods, percentile, damping, units, method)
-   
-    
+
     min_loc, penalty = _get_gmrotd_penalty(gmrot["GMRotDpp"],
                                            gmrot["GeoMeanPerAngle"])
     target_angle = gmrot["angles"][min_loc]
@@ -482,10 +493,10 @@ def rotdpp(acceleration_x, time_step_x, acceleration_y, time_step_y, periods,
     max_d_theta = np.zeros_like(max_a_theta)
     for iloc, theta in enumerate(theta_set):
         theta_rad = np.radians(theta)
-        arot = acceleration_x * np.cos(theta_rad) +\
-            acceleration_y * np.sin(theta_rad)
+        arot = acceleration_x * np.cos(theta_rad) + \
+               acceleration_y * np.sin(theta_rad)
         saxy = get_response_spectrum(arot, time_step_x, periods, damping,
-            units, method)[0]
+                                     units, method)[0]
         max_a_theta[iloc, 0] = saxy["PGA"]
         max_a_theta[iloc, 1:] = saxy["Pseudo-Acceleration"]
         max_v_theta[iloc, 0] = saxy["PGV"]
@@ -519,13 +530,13 @@ def rotipp(acceleration_x, time_step_x, acceleration_y, time_step_y, periods,
                                               periods, percentile, damping,
                                               units, method)
     locn, penalty = _get_gmrotd_penalty(
-        np.hstack([target["PGA"],target["Pseudo-Acceleration"]]),
+        np.hstack([target["PGA"], target["Pseudo-Acceleration"]]),
         rota)
     target_theta = np.radians(angles[locn])
-    arotpp = acceleration_x * np.cos(target_theta) +\
-        acceleration_y * np.sin(target_theta)
+    arotpp = acceleration_x * np.cos(target_theta) + \
+             acceleration_y * np.sin(target_theta)
     spec = get_response_spectrum(arotpp, time_step_x, periods, damping, units,
-        method)[0]
+                                 method)[0]
     spec["GMRot{:2.0f}".format(percentile)] = target
     return spec
 
@@ -613,9 +624,20 @@ def get_bracketed_duration(acceleration, time_step, threshold):
 def get_uniform_duration(acceleration, time_step, threshold):
     """
     Returns the total duration for which the record exceeds the threshold
-    """ 
+    """
     idx = np.where(np.fabs(acceleration) >= threshold)[0]
     return time_step * float(len(idx))
+
+
+def get_significant_duration_interval(acceleration, time_step, start_level=0.,
+                                      end_level=1.0):
+    """
+    Returns the significant duration time interval of the record
+    """
+    assert end_level >= start_level
+    husid, time_vector = get_husid(acceleration, time_step)
+    idx = np.searchsorted(husid, [start_level * husid[-1], end_level * husid[-1]])
+    return time_vector[idx]
 
 
 def get_significant_duration(acceleration, time_step, start_level=0.,
@@ -623,10 +645,8 @@ def get_significant_duration(acceleration, time_step, start_level=0.,
     """
     Returns the significant duration of the record
     """
-    assert end_level >= start_level
-    husid, time_vector = get_husid(acceleration, time_step)
-    idx = np.searchsorted(husid, [start_level * husid[-1], end_level * husid[-1]])
-    return np.diff(time_vector[idx])[0]
+    time_interval = get_significant_duration_interval(**locals())
+    return np.diff(time_interval)[0]
 
 
 def get_cav(acceleration, time_step, threshold=0.0):
@@ -642,13 +662,36 @@ def get_cav(acceleration, time_step, threshold=0.0):
         return 0.0
 
 
+def get_cav_std(acceleration, time_step):
+    """
+    Returns the standardized cumulative absolute velocity above a given threshold of
+    acceleration
+    """
+    # gmspy alternative:
+    # import gmspy as gm
+    # sgm = gm.SeismoGM(dt=time_step, acc=acceleration)
+    # return sgm.get_cavstd()
+    t = 0
+    offset = 1e-5
+    time_vector = get_time_vector(time_step, len(acceleration))
+    while True:
+        if t > time_vector.max():
+            break
+        flag = ((t - offset) < time_vector) & (time_vector <= (t + 1 + offset))
+        pga = np.max(np.fabs(acceleration[flag]))
+        if (pga - 0.025) < 0:
+            acceleration[flag] = 0
+        t += 1
+    return get_cav(acceleration, time_step)
+
+
 def get_arms(acceleration, time_step):
     """
     Returns the root mean square acceleration, defined as
     sqrt{(1 / duration) * \int{acc ^ 2} dt}
     """
     dur = time_step * float(len(acceleration) - 1)
-    return np.sqrt((1. / dur) * np.trapz(acceleration  ** 2., dx=time_step))
+    return np.sqrt((1. / dur) * np.trapz(acceleration ** 2., dx=time_step))
 
 
 def get_response_spectrum_intensity(spec):
@@ -675,6 +718,18 @@ def get_acceleration_spectrum_intensity(spec):
                                   spec["Period"] <= 0.5))[0]
     return np.trapz(spec["Pseudo-Acceleration"][idx],
                     spec["Period"][idx])
+
+
+def get_predominant_period(spec):
+    """
+    Returns the response spectrum predominant period, applicable only
+    for 5% critical damping
+    :param dict spec:
+        Response spectrum of the record as output from :class:
+        smtk.response_spectrum.BaseResponseSpectrum
+    """
+    idx = np.argmax(spec["Pseudo-Acceleration"])
+    return spec["Period"][idx]
 
 
 def get_quadratic_intensity(acc_x, acc_y, time_step):
@@ -744,24 +799,24 @@ def get_rotation_angles(transf_matrix, nhist):
     Function contributed by Cecilia Nieves, UME School, Pavia
     """
     icf = 180.0 / pi
-    if nhist == 3:    
+    if nhist == 3:
         alpha3z = icf * np.arccos(transf_matrix[2, 2])
     else:
-        alpha3z = 0    
+        alpha3z = 0
 
-    # Angle between axis x and the projection of axis 1 in the xy plane: theta
-    if nhist==3:    
+        # Angle between axis x and the projection of axis 1 in the xy plane: theta
+    if nhist == 3:
         # v_x is a unitary vector in the direction of axis x.
         # v_1 is a unitary vector in the direction of axis 1,
         # then projected onto the xy plane by setting is z coordinate
         # to zero. Theta1x is then the angle between axis x and the
         # projection of axis 1 over the xy plane.
-                
+
         v_x = np.array([1., 0., 0.])
         inv_transf_matrix = np.linalg.inv(transf_matrix)
         v_1 = inv_transf_matrix[:, 0]
         v_1[2] = 0.0
-        theta1x = icf * np.arccos(np.dot(v_x,v_1) / np.linalg.norm(v_1))
+        theta1x = icf * np.arccos(np.dot(v_x, v_1) / np.linalg.norm(v_1))
         theta1x = float(theta1x)
 
         # v_y is a unitary vector in the direction of axis y.
@@ -771,11 +826,11 @@ def get_rotation_angles(transf_matrix, nhist):
         v_y = np.array([0., 1., 0.])
         v_2 = inv_transf_matrix[:, 1]
         v_2[2] = 0.0
-        theta2y = icf * np.arccos(np.dot(v_y,v_2) / np.linalg.norm(v_2)) 
+        theta2y = icf * np.arccos(np.dot(v_y, v_2) / np.linalg.norm(v_2))
         theta2y = float(theta2y)
     else:
         alpha1x = icf * np.arccos(transf_matrix[0, 0])
         theta1x = float(alpha1x)
         theta2y = theta1x
-     
+
     return alpha3z, theta1x

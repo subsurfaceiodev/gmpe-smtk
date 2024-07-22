@@ -27,7 +27,6 @@ import smtk.response_spectrum as rsp
 import smtk.intensity_measures as ims
 import smtk.smoothing.konno_ohmachi as ko
 
-
 BASE_DATA_PATH = os.path.dirname(__file__)
 
 
@@ -162,6 +161,7 @@ class ScalarIntensityMeasureTestCase(BaseIMSTestCase):
     """
     Tests the functions returning scalar intensity measures
     """
+
     def test_get_peak_measures(self):
         # Tests the PGA, PGV, PGD functions
         pga_x, pgv_x, pgd_x, _, _ = ims.get_peak_measures(
@@ -209,6 +209,10 @@ class ScalarIntensityMeasureTestCase(BaseIMSTestCase):
         self.assertAlmostEqual(
             ims.get_cav(x_record, x_timestep, threshold=5.0),
             496.7741956, 3)
+        # CAV STD
+        self.assertAlmostEqual(
+            ims.get_cav_std(x_record / 1000, x_timestep),
+            0.46244, 3)
         # Arms
         self.assertAlmostEqual(
             ims.get_arms(x_record, x_timestep),
@@ -227,6 +231,15 @@ class ScalarIntensityMeasureTestCase(BaseIMSTestCase):
         self.assertAlmostEqual(housner, 121.3103787, delta=0.001)
         asi = ims.get_acceleration_spectrum_intensity(sax)
         self.assertAlmostEqual(asi, 432.5134666, 3)
+        predominant_period = ims.get_predominant_period(sax)
+        self.assertAlmostEqual(predominant_period, 0.42, 3)
+
+    def test_mean_period(self):
+        # Tests mean period
+        x_record = self.fle["INPUTS/RECORD1/XRECORD"][:]
+        x_timestep = self.fle["INPUTS/RECORD1/XRECORD"].attrs["timestep"]
+        mean_period = ims.get_mean_period(x_record, x_timestep)
+        self.assertAlmostEqual(mean_period, 0.55895, 3)
 
 
 class FourierSpectrumBuildSmooth(BaseIMSTestCase):

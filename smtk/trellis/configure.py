@@ -31,7 +31,7 @@ from openquake.hazardlib.scalerel.wc1994 import WC1994
 from openquake.hazardlib.site import Site, SiteCollection
 from openquake.hazardlib.source.rupture import BaseRupture as Rupture
 from openquake.hazardlib.source.point import PointSource
-from openquake.hazardlib.gsim.base import (
+from openquake.hazardlib.contexts import (
     SitesContext, RuptureContext, DistancesContext)
 from smtk.sm_utils import _save_image
 from openquake.hazardlib.contexts import get_distances

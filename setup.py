@@ -34,13 +34,13 @@ setup(
     packages=find_packages(exclude=['tests', 'tests.*']),
     # Minimal requirements, for a complete list see requirements-*.txt
     install_requires=[
-        'openquake.engine >=3.6',
+        'openquake.engine >=3.20.1',
     ],
     author='GEM Foundation',
     author_email='hazard@globalquakemodel.org',
     maintainer='GEM Foundation',
     maintainer_email='hazard@globalquakemodel.org',
-    classifiers=(
+    classifiers=[
         'Development Status :: 4 - Beta',
         'Intended Audience :: Education',
         'Intended Audience :: Science/Research',
@@ -48,7 +48,7 @@ setup(
         'Operating System :: OS Independent',
         'Programming Language :: Python :: 3',
         'Topic :: Scientific/Engineering',
-    ),
+    ],
     keywords="seismic hazard",
     license="AGPL3",
     platforms=["any"],
