@@ -664,8 +664,7 @@ def get_cav(acceleration, time_step, threshold=0.0):
 
 def get_cav_std(acceleration, time_step):
     """
-    Returns the standardized cumulative absolute velocity above a given threshold of
-    acceleration
+    Returns the standardized cumulative absolute velocity
     """
     # gmspy alternative:
     # import gmspy as gm
