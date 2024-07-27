@@ -673,15 +673,16 @@ def get_cav_std(acceleration, time_step):
     t = 0
     offset = 1e-5
     time_vector = get_time_vector(time_step, len(acceleration))
+    acceleration_mod = acceleration.copy()
     while True:
         if t > time_vector.max():
             break
         flag = ((t - offset) < time_vector) & (time_vector <= (t + 1 + offset))
-        pga = np.max(np.fabs(acceleration[flag]))
+        pga = np.max(np.fabs(acceleration_mod[flag]))
         if (pga - 0.025) < 0:
-            acceleration[flag] = 0
+            acceleration_mod[flag] = 0
         t += 1
-    return get_cav(acceleration, time_step)
+    return get_cav(acceleration_mod, time_step)
 
 
 def get_arms(acceleration, time_step):
