@@ -575,6 +575,13 @@ def get_arias_intensity(acceleration, time_step, start_level=0., end_level=1.):
     return ARIAS_FACTOR * husid[-1]
 
 
+def get_characteristic_intensity(arms, dur):
+    """
+    Returns the Characteristic intensity of the record
+    """
+    return arms ** 1.5 * np.sqrt(dur)
+
+
 def plot_husid(acceleration, time_step, start_level=0., end_level=1.0,
                figure_size=(7, 5), filename=None, filetype="png", dpi=300):
     """
@@ -694,6 +701,13 @@ def get_arms(acceleration, time_step):
     return np.sqrt((1. / dur) * np.trapz(acceleration ** 2., dx=time_step))
 
 
+def get_specific_energy_density(velocity, time_step):
+    """
+    Returns the Specific Energy Density
+    """
+    return np.trapz(velocity ** 2., dx=time_step)
+
+
 def get_response_spectrum_intensity(spec):
     """
     Returns the response spectrum intensity (Housner intensity), defined
@@ -706,6 +720,17 @@ def get_response_spectrum_intensity(spec):
     idx = np.where(np.logical_and(spec["Period"] >= 0.1,
                                   spec["Period"] <= 2.5))[0]
     return np.trapz(spec["Pseudo-Velocity"][idx],
+                    spec["Period"][idx])
+
+
+def get_velocity_spectrum_intensity(spec):
+    """
+    Returns the velocity spectrum intensity, defined as the integral
+    of the velocity spectrum between the periods of 0.1 and 2.5 s
+    """
+    idx = np.where(np.logical_and(spec["Period"] >= 0.1,
+                                  spec["Period"] <= 2.5))[0]
+    return np.trapz(spec["Velocity"][idx],
                     spec["Period"][idx])
 
 
