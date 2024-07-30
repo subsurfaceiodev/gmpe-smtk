@@ -37,7 +37,8 @@ from openquake.hazardlib.gsim import get_available_gsims
 from openquake.hazardlib import imt
 import smtk.intensity_measures as ims
 from smtk.strong_motion_selector import SMRecordSelector
-from smtk.sm_utils import convert_accel_units, check_gsim_list
+from smtk.sm_utils import convert_accel_units
+from smtk.sm_oq_utils import check_gsim_list
 
 GSIM_LIST = get_available_gsims()
 GSIM_KEYS = set(GSIM_LIST)

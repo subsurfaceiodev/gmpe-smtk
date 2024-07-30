@@ -41,7 +41,8 @@ import smtk.trellis.configure as rcfg
 from smtk.sm_database import GroundMotionDatabase, GroundMotionRecord,\
     Earthquake, Magnitude, Rupture, FocalMechanism, GCMTNodalPlanes,\
     Component, RecordSite, RecordDistance
-from smtk.sm_utils import convert_accel_units, MECHANISM_TYPE, DIP_TYPE
+from smtk.sm_utils import convert_accel_units
+from ..sm_oq_utils import MECHANISM_TYPE, DIP_TYPE
 from smtk.parsers import valid
 from smtk.parsers.base_database_parser import (get_float, get_int,
                                                get_positive_float,

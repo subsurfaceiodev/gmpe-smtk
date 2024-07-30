@@ -38,7 +38,8 @@ from openquake.hazardlib import imt
 from openquake.hazardlib.gsim.base import (RuptureContext, DistancesContext,
                                            SitesContext)
 from openquake.hazardlib.scalerel.wc1994 import WC1994
-from smtk.sm_utils import _save_image, check_gsim_list
+from smtk.sm_utils import _save_image
+from smtk.sm_oq_utils import check_gsim_list
 import smtk.trellis.trellis_utils as utils
 from smtk.trellis.configure import GSIMRupture, DEFAULT_POINT
 

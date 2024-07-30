@@ -12,6 +12,8 @@ import h5py
 from openquake.hazardlib import imt
 from openquake.hazardlib.site import Site, SiteCollection
 from openquake.hazardlib.geo.point import Point
+
+import smtk.sm_oq_utils
 from smtk.trellis.configure import vs30_to_z1pt0_as08, z1pt0_to_z2pt5
 from smtk.trellis.configure import vs30_to_z1pt0_cy14, vs30_to_z2pt5_cb14
 import smtk.sm_utils as utils
@@ -281,8 +283,8 @@ class FocalMechanism(object):
         Returns an idealised "rake" based on a qualitative description of the
         style of faulting
         """
-        if self.mechanism_type in utils.MECHANISM_TYPE:
-            return utils.MECHANISM_TYPE[self.mechanism_type]
+        if self.mechanism_type in smtk.sm_oq_utils.MECHANISM_TYPE:
+            return smtk.sm_oq_utils.MECHANISM_TYPE[self.mechanism_type]
         return 0.0
 
     def to_dict(self):
@@ -1039,7 +1041,7 @@ class GroundMotionDatabase(ContextDB):
             else:
                 # Use the PeerMSR to define the area and assuming an aspect ratio
                 # of 1 get the width
-                ctx.width = np.sqrt(utils.DEFAULT_MSR.get_median_area(ctx.mag, 0))
+                ctx.width = np.sqrt(smtk.sm_oq_utils.DEFAULT_MSR.get_median_area(ctx.mag, 0))
 
             # Default hypocentre location to the middle of the rupture
             ctx.hypo_loc = (0.5, 0.5)
