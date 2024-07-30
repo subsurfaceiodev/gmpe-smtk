@@ -33,9 +33,14 @@ setup(
     url=url,
     packages=find_packages(exclude=['tests', 'tests.*']),
     # Minimal requirements, for a complete list see requirements-*.txt
-    install_requires=[
-        'openquake.engine >=3.20.1',
-    ],
+    # install_requires=[
+    #     'openquake.engine >=3.20.1',
+    # ],
+    extras_require={
+        'all': [
+            'openquake.engine >=3.20.1'
+        ],
+    },
     author='GEM Foundation',
     author_email='hazard@globalquakemodel.org',
     maintainer='GEM Foundation',
