@@ -4,14 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a42dfaf7-49fa-447e-a19b-1b505d870444" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/smtk/sm_oq_utils.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/smtk/parsers/esm_flatfile_parser.py" beforeDir="false" afterPath="$PROJECT_DIR$/smtk/parsers/esm_flatfile_parser.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/smtk/residuals/gmpe_residuals.py" beforeDir="false" afterPath="$PROJECT_DIR$/smtk/residuals/gmpe_residuals.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/smtk/sm_database.py" beforeDir="false" afterPath="$PROJECT_DIR$/smtk/sm_database.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/smtk/sm_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/smtk/sm_utils.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/smtk/trellis/trellis_plots.py" beforeDir="false" afterPath="$PROJECT_DIR$/smtk/trellis/trellis_plots.py" afterDir="false" />
-    </list>
+    <list default="true" id="a42dfaf7-49fa-447e-a19b-1b505d870444" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -20,18 +13,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "subsurfaceiodev"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;subsurfaceiodev&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/subsurfaceiodev/gmpe-smtk.git",
-    "accountId": "8d6edb3f-fa02-40fe-bf71-4937f343e933"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/subsurfaceiodev/gmpe-smtk.git&quot;,
+    &quot;accountId&quot;: &quot;8d6edb3f-fa02-40fe-bf71-4937f343e933&quot;
   }
-}]]></component>
+}</component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 0
 }</component>
@@ -45,13 +38,16 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "master",
     "last_opened_file_path": "C:/Users/Jorge Ordonez/PycharmProjects/gmpe-smtk/smtk/sm_oq_utils.py",
-    "settings.editor.selected.configurable": "vcs.Git"
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "vcs.Git",
+    "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-python-sdk-975db3bf15a3-31b6be0877a2-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-241.18034.82" />
+        <option value="bundled-js-predefined-d6986cc7102b-7c0b70fcd90d-JavaScript-PY-242.21829.153" />
+        <option value="bundled-python-sdk-464836ebc622-b74155a9e76b-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-242.21829.153" />
       </set>
     </attachedChunks>
   </component>
@@ -63,7 +59,11 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1721978947574</updated>
+      <workItem from="1726756776221" duration="6000" />
     </task>
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
   </component>
 </project>
